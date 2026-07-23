@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class Stream_02_Test {
 		List<Order> orders = new Data().getOrders();
 
 		// TODO Trouver la liste des clients associés aux commandes
-		List<Customer> result = null;
+		List<Customer> result = orders.stream().map(o -> o.getCustomer()).toList();
 
 		assertThat(result, hasSize(8));
 	}
@@ -35,7 +36,7 @@ public class Stream_02_Test {
 		List<Order> orders = new Data().getOrders();
 
 		// TODO Compter le nombre de clients associés aux commandes
-		long result = 0;
+		long result = orders.stream().map(Order::getCustomer).count();
 
 		assertThat(result, is(8L));
 	}
@@ -46,7 +47,7 @@ public class Stream_02_Test {
 		List<Order> orders = new Data().getOrders();
 
 		// TODO Trouver la liste des différents clients associés aux commandes (sans doublons)
-		List<Customer> result = null;
+		List<Customer> result = orders.stream().map(Order::getCustomer).distinct().toList();
 
 		assertThat(result, hasSize(2));
 	}
@@ -57,7 +58,7 @@ public class Stream_02_Test {
 		List<Order> orders = new Data().getOrders();
 
 		// TODO Compter le nombre des différents clients associés aux commandes
-		long result = 0L;
+		long result = orders.stream().map(Order::getCustomer).distinct().count();
 
 		assertThat(result, is(2L));
 	}
@@ -71,7 +72,7 @@ public class Stream_02_Test {
 		 * TODO Calculer le chiffre d'affaires total de la pizzeria (somme des prix des
 		 * commandes)
 		 */
-		double result = 0.0;
+		double result = orders.stream().mapToDouble(Order::getPrice).sum();
 
 		assertThat(result, is(10900.0));
 	}
@@ -84,7 +85,7 @@ public class Stream_02_Test {
 		/*
 		 * TODO Calculer le prix moyen d'une commande
 		 */
-		OptionalDouble result = null;
+		OptionalDouble result = orders.stream().mapToDouble(Order::getPrice).average();
 
 		assertThat(result.isPresent(), is(true));
 		assertThat(result.getAsDouble(), is(1362.5));
